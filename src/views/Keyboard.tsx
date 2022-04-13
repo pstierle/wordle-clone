@@ -3,7 +3,7 @@ import { IKeyboard } from "../models/IKeyboard";
 
 function Keyboard(props: IKeyboard) {
   return (
-    <div>
+    <div className="flex gap-2 justify-evenly mt-10">
       {props.keys.map((key, index) => {
         return (
           <Key

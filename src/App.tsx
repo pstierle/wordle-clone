@@ -8,13 +8,26 @@ import KeyboardJSON from "./assets/keyboard.json";
 function App() {
   const [lastPressed, setlastPressed] = useState<IKey>();
   const [keys, setKeys] = useState<IKey[]>([]);
+  const [word] = useState<string>("test");
+  const [guess, setGuess] = useState<IKey[]>([]);
 
   const handler = useCallback(
     (event: KeyboardEvent) => {
-      setlastPressed({ letter: event.key, code: event.keyCode });
-      console.log(lastPressed);
+      const key: IKey = { letter: event.key, code: event.keyCode };
+
+      setlastPressed(key);
+
+      if (key.letter === "Backspace") {
+        setGuess(guess.filter((g, i) => i !== guess.length - 1));
+        return;
+      }
+
+      if (guess.length < word.length) {
+        const newGuess = [...guess, key];
+        setGuess(newGuess);
+      }
     },
-    [setlastPressed, lastPressed]
+    [setlastPressed, guess, setGuess, word]
   );
 
   useEventListener("keydown", handler);
@@ -33,7 +46,7 @@ function App() {
 
   return (
     <div className="flex flex-col justify-center w-1/2 mx-auto mt-56">
-      <Guess />
+      <Guess guess={guess} />
       <Keyboard lastPressed={lastPressed} keys={keys} />
     </div>
   );
