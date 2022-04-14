@@ -1,17 +1,28 @@
 import Key from "../components/Key";
-import { IKeyboard } from "../models/IKeyboard";
+import { IKey } from "../models/IKey";
 
-function Keyboard(props: IKeyboard) {
+interface Props {
+  lastPressed?: IKey;
+  nestedKeys: Array<IKey[]>;
+}
+
+function Keyboard(props: Props) {
   return (
-    <div className="flex gap-2 justify-evenly mt-10">
-      {props.keys.map((key, index) => {
+    <div className="flex flex-col gap-1 mt-10">
+      {props.nestedKeys.map((keys, index) => {
         return (
-          <Key
-            key={index}
-            code={key.code}
-            letter={key.letter}
-            lastPressed={props.lastPressed}
-          ></Key>
+          <div key={index} className="flex gap-1 justify-center">
+            {keys.map((key, i) => {
+              return (
+                <Key
+                  key={i}
+                  data={key}
+                  highlight={props.lastPressed?.letter === key.letter}
+                  className="w-10 h-10"
+                ></Key>
+              );
+            })}
+          </div>
         );
       })}
     </div>

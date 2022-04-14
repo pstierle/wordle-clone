@@ -1,17 +1,15 @@
-import { IGuess } from "../models/IGuess";
+import { IKey } from "../models/IKey";
+import GuessRow from "../components/GuessRow";
 
-function Guess(props: IGuess) {
+interface Props {
+  nestedGuess: Array<IKey[]>;
+}
+
+function Guess(props: Props) {
   return (
-    <div className="flex gap-1  justify-center">
-      {props.guess.map((key, index) => {
-        return (
-          <div
-            key={index}
-            className="h-14 w-14 bg-gray-700 rounded uppercase flex justify-center items-center font-bold"
-          >
-            <p>{key.letter}</p>
-          </div>
-        );
+    <div className="p-2 flex flex-col gap-2">
+      {props.nestedGuess.map((guess, index) => {
+        return <GuessRow key={index} guess={guess}></GuessRow>;
       })}
     </div>
   );
