@@ -7,7 +7,7 @@ interface Props {
 
 function GuessRow(props: Props) {
   return (
-    <div className="flex gap-1  justify-center">
+    <div className="flex items-center gap-1 justify-center bg-gray-800 rounded h-20 px-3">
       {props.guess.map((key, index) => {
         return (
           <div

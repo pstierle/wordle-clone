@@ -73,7 +73,7 @@ function App() {
 
   return (
     <div className="flex flex-col justify-center w-1/2 mx-auto mt-56">
-      <Guess nestedGuess={nestedGuess} />
+      <Guess activeRow={activeGuessIndex} nestedGuess={nestedGuess} />
       <Keyboard lastPressed={lastPressed} nestedKeys={nestedKeys} />
     </div>
   );
