@@ -4,9 +4,10 @@ import { useCallback, useEffect, useState, useMemo } from "react";
 import { IKey } from "./models/IKey";
 import { useEventListener } from "./hooks/useEventListener";
 import KeyboardJSON from "./assets/keyboard.json";
+import { useKeyboard } from "./hooks/useKeyboard";
 
 function App() {
-  const [lastPressed, setlastPressed] = useState<IKey>();
+  const { nestedKeys, loadKeys, lastPressed, setLastPressed } = useKeyboard();
   const [word] = useState<string>("test");
   const [nestedGuess, setNestedGuess] = useState<Array<IKey[]>>([
     [],
@@ -15,7 +16,6 @@ function App() {
     [],
     [],
   ]);
-  const [nestedKeys, setNestedKeys] = useState<Array<IKey[]>>([[], [], []]);
   const [activeGuessIndex, setActiveGuessIndex] = useState<number>(0);
   const currentGuess = useMemo<IKey[]>(() => {
     return nestedGuess[activeGuessIndex];
@@ -74,7 +74,7 @@ function App() {
 
       const clickedKey: IKey = { letter: event.key, code: event.keyCode };
 
-      setlastPressed(clickedKey);
+      setLastPressed(clickedKey);
 
       if (clickedKey.letter === "Backspace" && currentGuess.length > 0) {
         removeLastGuess();
@@ -110,27 +110,15 @@ function App() {
       removeLastGuess,
       checkGuess,
       activeGuessIndex,
+      setLastPressed,
     ]
   );
 
   useEventListener("keydown", handler);
 
   useEffect(() => {
-    const nestedKeys: Array<IKey[]> = [];
-    const keyBoardJSON: any = KeyboardJSON;
-
-    for (const row in keyBoardJSON) {
-      nestedKeys[row as any] = [];
-      for (const key in keyBoardJSON[row]) {
-        nestedKeys[row as any].push({
-          letter: key,
-          code: keyBoardJSON[row][key],
-          type: "inKeyBoard",
-        });
-      }
-    }
-    setNestedKeys(nestedKeys);
-  }, []);
+    loadKeys();
+  }, [loadKeys]);
 
   return (
     <div className="flex flex-col justify-center w-1/2 mx-auto mt-56">
