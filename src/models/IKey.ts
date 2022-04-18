@@ -1,5 +1,5 @@
 export interface IKey {
-  code: number;
+  code?: number;
   letter: string;
   type?: "match" | "exactMatch" | "inKeyBoard";
 }

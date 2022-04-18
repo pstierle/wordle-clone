@@ -2,13 +2,14 @@ import { useCallback, useMemo, useState } from "react";
 import { IKey } from "../models/IKey";
 
 export function useGuess() {
-  const [word] = useState<string>("test");
+  const [word] = useState<string>("kekw");
+
   const [nestedGuess, setNestedGuess] = useState<Array<IKey[]>>([
-    [],
-    [],
-    [],
-    [],
-    [],
+    Array(word.length).fill({ letter: "" }),
+    Array(word.length).fill({ letter: "" }),
+    Array(word.length).fill({ letter: "" }),
+    Array(word.length).fill({ letter: "" }),
+    Array(word.length).fill({ letter: "" }),
   ]);
 
   const [activeGuessIndex, setActiveGuessIndex] = useState<number>(0);
@@ -19,7 +20,13 @@ export function useGuess() {
 
   const addGuess = useCallback(
     (key: IKey) => {
-      const newCurrentGuess = [...currentGuess, key];
+      const newCurrentGuess = [...currentGuess];
+      for (let i = 0; i < newCurrentGuess.length; i++) {
+        if (!newCurrentGuess[i].code) {
+          newCurrentGuess[i] = key;
+          break;
+        }
+      }
       let nestedGuessCopy = [...nestedGuess];
       nestedGuessCopy[activeGuessIndex] = newCurrentGuess;
       setNestedGuess(nestedGuessCopy);
@@ -32,7 +39,6 @@ export function useGuess() {
     let nestedGuessCopy = [...nestedGuess];
     newCurrentGuess.forEach((key, i) => {
       if (word.includes(key.letter)) {
-        console.log(key.letter, word[i]);
         if (i === word.indexOf(key.letter)) {
           key.type = "exactMatch";
         } else {
@@ -58,14 +64,18 @@ export function useGuess() {
 
   const removeLastGuess = useCallback(() => {
     const newCurrentGuess = [...currentGuess];
-    newCurrentGuess.pop();
+    for (let i = newCurrentGuess.length - 1; i >= 0; i--) {
+      if (newCurrentGuess[i].code) {
+        newCurrentGuess[i] = { letter: "" };
+        break;
+      }
+    }
     let nestedGuessCopy = [...nestedGuess];
     nestedGuessCopy[activeGuessIndex] = newCurrentGuess;
     setNestedGuess(nestedGuessCopy);
   }, [currentGuess, nestedGuess, activeGuessIndex, setNestedGuess]);
 
   return {
-    word,
     nestedGuess,
     activeGuessIndex,
     currentGuess,

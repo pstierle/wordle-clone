@@ -10,7 +10,6 @@ import { useGuess } from "./hooks/useGuess";
 function App() {
   const { nestedKeys, loadKeys, lastPressed, setLastPressed } = useKeyboard();
   const {
-    word,
     nestedGuess,
     activeGuessIndex,
     currentGuess,
@@ -34,29 +33,26 @@ function App() {
 
       if (
         clickedKey.letter === "Enter" &&
-        currentGuess.length === word.length
+        currentGuess.every((guess) => guess.code)
       ) {
         checkGuess();
         return;
       }
 
-      if (currentGuess.length < word.length) {
-        let validKey = false;
+      let validKey = false;
 
-        const keyBoardJSON: any = KeyboardJSON;
+      const keyBoardJSON: any = KeyboardJSON;
 
-        for (const row in keyBoardJSON) {
-          for (const key in keyBoardJSON[row]) {
-            if (key === clickedKey.letter) validKey = true;
-          }
+      for (const row in keyBoardJSON) {
+        for (const key in keyBoardJSON[row]) {
+          if (key === clickedKey.letter) validKey = true;
         }
-
-        if (validKey) addGuess(clickedKey);
       }
+
+      if (validKey) addGuess(clickedKey);
     },
     [
       currentGuess,
-      word,
       addGuess,
       removeLastGuess,
       checkGuess,
