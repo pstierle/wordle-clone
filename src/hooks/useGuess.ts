@@ -37,13 +37,15 @@ export function useGuess() {
   const checkGuess = useCallback(() => {
     const newCurrentGuess = [...currentGuess];
     let nestedGuessCopy = [...nestedGuess];
-    newCurrentGuess.forEach((key, i) => {
+    newCurrentGuess.forEach((key, guessIndex) => {
       if (word.includes(key.letter)) {
-        if (i === word.indexOf(key.letter)) {
-          key.type = "exactMatch";
-        } else {
-          key.type = "match";
-        }
+        key.type = "match";
+
+        word.split("").forEach((char, wordIndex) => {
+          if (char === key.letter && guessIndex === wordIndex) {
+            key.type = "exactMatch";
+          }
+        });
       }
     });
     nestedGuessCopy[activeGuessIndex] = newCurrentGuess;
