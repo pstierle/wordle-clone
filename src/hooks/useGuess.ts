@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { IKey } from "../models/IKey";
 
 export function useGuess() {
-  const [word] = useState<string>("kekw");
+  const [word, setWord] = useState<string>("kekw");
 
   const [nestedGuess, setNestedGuess] = useState<Array<IKey[]>>([
     Array(word.length).fill({ letter: "" }),
@@ -20,15 +20,15 @@ export function useGuess() {
 
   const addGuess = useCallback(
     (key: IKey) => {
-      const newCurrentGuess = [...currentGuess];
-      for (let i = 0; i < newCurrentGuess.length; i++) {
-        if (!newCurrentGuess[i].code) {
-          newCurrentGuess[i] = key;
+      const updatedGuess = [...currentGuess];
+      for (let i = 0; i < updatedGuess.length; i++) {
+        if (!updatedGuess[i].code) {
+          updatedGuess[i] = key;
           break;
         }
       }
       let nestedGuessCopy = [...nestedGuess];
-      nestedGuessCopy[activeGuessIndex] = newCurrentGuess;
+      nestedGuessCopy[activeGuessIndex] = updatedGuess;
       setNestedGuess(nestedGuessCopy);
     },
     [currentGuess, nestedGuess, activeGuessIndex, setNestedGuess]
@@ -65,15 +65,15 @@ export function useGuess() {
   ]);
 
   const removeLastGuess = useCallback(() => {
-    const newCurrentGuess = [...currentGuess];
-    for (let i = newCurrentGuess.length - 1; i >= 0; i--) {
-      if (newCurrentGuess[i].code) {
-        newCurrentGuess[i] = { letter: "" };
+    const updatedGuess = [...currentGuess];
+    for (let i = updatedGuess.length - 1; i >= 0; i--) {
+      if (updatedGuess[i].code) {
+        updatedGuess[i] = { letter: "" };
         break;
       }
     }
     let nestedGuessCopy = [...nestedGuess];
-    nestedGuessCopy[activeGuessIndex] = newCurrentGuess;
+    nestedGuessCopy[activeGuessIndex] = updatedGuess;
     setNestedGuess(nestedGuessCopy);
   }, [currentGuess, nestedGuess, activeGuessIndex, setNestedGuess]);
 
@@ -84,5 +84,6 @@ export function useGuess() {
     addGuess,
     checkGuess,
     removeLastGuess,
+    setWord,
   };
 }
