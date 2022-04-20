@@ -5,10 +5,10 @@ interface Props {
   guess: IKey[];
 }
 
-function GuessRow(props: Props) {
+export default function GuessRow({ guess }: Props) {
   return (
     <div className="flex items-center gap-1 justify-center ">
-      {props.guess.map((key, index) => {
+      {guess.map((key, index) => {
         return (
           <div
             key={index}
@@ -27,5 +27,3 @@ function GuessRow(props: Props) {
     </div>
   );
 }
-
-export default GuessRow;

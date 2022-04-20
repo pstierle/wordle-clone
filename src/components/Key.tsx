@@ -6,16 +6,14 @@ interface Props extends IStyleableComponent {
   data: IKey;
 }
 
-function Key(props: Props) {
+export default function Key({ highlight, data, className }: Props) {
   return (
     <div
       className={`px-2 py-1 rounded text-center uppercase flex justify-center items-center font-bold transition-all ${
-        props.highlight ? "bg-red-200" : "bg-gray-600"
-      } ${props.className}`}
+        highlight ? "bg-red-200" : "bg-gray-600"
+      } ${className}`}
     >
-      <p>{props.data.letter}</p>
+      <p>{data.letter}</p>
     </div>
   );
 }
-
-export default Key;

@@ -6,10 +6,10 @@ interface Props {
   nestedKeys: Array<IKey[]>;
 }
 
-function Keyboard(props: Props) {
+export default function Keyboard({ lastPressed, nestedKeys }: Props) {
   return (
     <div className="flex flex-col gap-1 mt-10">
-      {props.nestedKeys.map((keys, index) => {
+      {nestedKeys.map((keys, index) => {
         return (
           <div key={index} className="flex gap-1 justify-center">
             {keys.map((key, i) => {
@@ -17,7 +17,7 @@ function Keyboard(props: Props) {
                 <Key
                   key={i}
                   data={key}
-                  highlight={props.lastPressed?.letter === key.letter}
+                  highlight={lastPressed?.letter === key.letter}
                   className="w-10 h-10"
                 ></Key>
               );
@@ -28,5 +28,3 @@ function Keyboard(props: Props) {
     </div>
   );
 }
-
-export default Keyboard;
